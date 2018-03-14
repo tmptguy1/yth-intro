@@ -1,0 +1,139 @@
+<% include partials/header %>
+
+<p>Welcome to your YouTube Home Page</p>
+<div class="container">
+    <div class="jumbotron">
+      <h1 class="display-4">Hadron</h1>
+      <p class="lead">Featured Creator</p>
+      <hr class="my-4">
+      <p>Hadron is a comedy YouTuber covering mainly Destiny 2 and Overwatch</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+      </p>
+    </div>
+    
+</div>
+
+<div class="container">
+  <h2><script> document.write(new Date().toDateString()); </script></h2>
+    
+    <div class="row">
+      <div class="card-deck">
+        <%  for(var i = topgamevids.length - 1; i >= 0; i--) { %>
+        
+        
+          <div class="col-xl-12">
+            <div class="card">
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= topgamevids[i].link %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              <div class="card-body">
+                <h5 class="card-title"><%= topgamevids[i].title %></h5>
+                <p class="card-text"><%= topgamevids[i].author %></p>
+                <p class="card-text"><small class="text-muted"><%= topgamevids[i].created.toDateString() %></small></p>
+              </div>
+            </div>
+          </div>
+          
+          <% }; %>
+      </div>
+    </div>
+    
+    <!--<div class="row">-->
+    <!--        <div class="card-deck">-->
+    <!--            <div class="col-xl-6">-->
+    <!--          <div class="card">-->
+    <!--            <iframe width="524" height="294.75" src="https://www.youtube.com/embed/DsEDhuDssZw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+    <!--            <div class="card-body">-->
+    <!--              <h5 class="card-title">Card title</h5>-->
+    <!--              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
+    <!--              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--      </div>-->
+    <!--      <div class="col-xl-6">-->
+    <!--          <div class="card">-->
+    <!--            <iframe width="524" height="294.75" src="https://www.youtube.com/embed/WHQK9qeKavM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+    <!--            <div class="card-body">-->
+    <!--              <h5 class="card-title">Card title</h5>-->
+    <!--              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>-->
+    <!--              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    
+    <!--<div class="row">-->
+    <!--        <div class="card-deck">-->
+    <!--            <div class="col-xl-6">-->
+    <!--          <div class="card">-->
+    <!--            <iframe width="524" height="294.75" src="https://www.youtube.com/embed/sBv7NUuhu5M" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+    <!--            <div class="card-body">-->
+    <!--              <h5 class="card-title">Card title</h5>-->
+    <!--              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
+    <!--              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--      </div>-->
+    <!--      <div class="col-xl-6">-->
+    <!--          <div class="card">-->
+    <!--            <iframe width="524" height="294.75" src="https://www.youtube.com/embed/rLfr8Kr5mG4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+    <!--            <div class="card-body">-->
+    <!--              <h5 class="card-title">Card title</h5>-->
+    <!--              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>-->
+    <!--              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</div>-->
+    
+</div>
+
+    <nav aria-label="Top video game videos navigation">
+    <% if (pages && pages > 0) { %>
+    <ul class="pagination justify-content-center">
+        <% if (current == 1) { %>
+        <li class="page-item disabled"><a class="page-link">First</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/">First</a></li>
+        <% } %>
+ 
+        <% if (current == 1) { %>
+        <li class="disabled"><a class="page-link">«</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/?page=<%= Number(current) - 1 %>">«</a></li>
+        <% } %>
+ 
+        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+        <% if (i !== 1) { %>
+        <li class="disabled"><a class="page-link">...</a></li>
+        <% } %>
+        <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+        <% if (i == current) { %>
+        <li class="active"><a class="page-link"><%= i %></a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/?page=<%= i %>"><%= i %></a></li>
+        <% } %>
+        <% if (i == Number(current) + 4 && i < pages) { %>
+        <li class="disabled"><a class="page-link">...</a></li>
+        <% } %>
+        <% } %>
+ 
+        <% if (current == pages) { %>
+        <li class="disabled"><a class="page-link">»</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/?page=<%= Number(current) + 1 %>">»</a></li>
+        <% } %>
+ 
+        <% if (current == pages) { %>
+        <li class="disabled"><a class="page-link">Last</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/?page=<%= pages %>">Last</a></li>
+        <% } %>
+    </ul>
+    <% } %>
+</nav>
+
+
+
+<% include partials/footer %>
