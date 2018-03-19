@@ -14,6 +14,7 @@
     "express": "^4.16.2",
     "mongoose": "^5.0.9",
     "redditwrap.js": "^7.0.0",
-    "redwrap": "0.0.4"
+    "redwrap": "0.0.4",
+    "youtube-search": "^1.0.10"
   }
 }

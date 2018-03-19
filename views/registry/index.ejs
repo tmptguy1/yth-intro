@@ -1,0 +1,57 @@
+<% include ../partials/header %>
+
+
+<!--<div class="container">-->
+    <header class = "jumbotron">
+        <div class="container">
+            <h1>Welcome to the YouTube Registry</h1>
+            <p>Find the best content creators in a wide variety of categories!</p>
+            <p>
+                <a class="btn btn-primary btn-lg" href="/registry/new">Add New Creator</a>
+                </p>
+        </div>
+    </header>
+    
+    
+    <!--Cold needed to add the style tags here so they would wrap but mine worked without it-->
+    <div class="row text-center" style="display:flex; flex-wrap:wrap;">
+        <% if(youtubers.length < 1){ %>
+         <div class="col-md-12">
+             <h3>No creators match your search, please search again.</h3>
+             <p>
+                <form class="form-inline justify-content-center" action="/campgrounds" method="GET">
+                          <input class="form-control mr-sm-2" name="search" type="search" placeholder="Campground Search" aria-label="Search">
+                          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+            </p>
+         </div>
+        
+        
+        <% } %>
+        <% youtubers.forEach(function(youtuber){ %>
+        <div class="col-md-3 col-sm-6">
+            <div class="img-thumbnail mx-auto">
+                <img src="<%= youtuber.thumbSmall %>" class = "img-fluid">
+                <div class="caption">
+                    <h4><%= youtuber.ytUsername %></h4>
+                </div>
+                <a href="/registry/<%= youtuber._id %>" class="btn btn-primary">More Info</a>
+            </div>
+            
+        </div>
+        <% }); %>
+        
+        
+    </div>
+    
+
+    
+<!--</div>-->
+
+
+
+
+
+
+
+<% include ../partials/footer %>
