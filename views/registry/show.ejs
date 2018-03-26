@@ -3,25 +3,89 @@
 <!--<div class="container">-->
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">YelpCamp</p>
+            <p class="lead">YouTube Home Page</p>
             <div class="list-group">
                 <li class="list-group-item active">Info 1</li>
                 <li class="list-group-item">Info 2</li>
                 <li class="list-group-item">Info 3</li>
             </div>
-            <div id="map"></div>
+            <div id="twitter">
+                <% if(youtuber.twitterLink != null){ %>
+                      <a class="twitter-timeline" data-height="650" data-theme="dark" href="<%= youtuber.twitterLink %>">Tweets by MrMuselk</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                      <% } %>
+            </div>
+            <div id="instagram">
+                
+            </div>
         </div>
-        <div class="col-md-9">
-            <div class="img-thumbnail">
-                <img class="img-responsive" src="<%= youtuber.thumbMed %>">
-                <div class="caption-full">
-                    
-                    <h4><a></a><%=youtuber.ytUsername%></a></h4>
-                    <p><%= youtuber.description %></p>
-                    
-                    
-                    
+        <div class="col-md-8">
+            <div class="jumbotron jumbotron">
+                
+                <div class="container-fluid">
+                                <div class="row">
+                                      <div class="col-md-4">
+                                          <img class="img-responsive float-right" src="<%= youtuber.thumbMed %>">
+                                      </div>
+                                      <div class="col-md-5">
+                                        <h1 class="display-4"><%= youtuber.ytUsername %></h1>
+                                        <p class="lead"><%= youtuber.description %></p>
+                                      </div>
+                                      <div class="col-md-3">
+                                          
+                                            <ul id="socialLinks">
+                                                <li><a href="<%= youtuber.ytLink %>" class="btn btn-lg btn-block active ytLink" role="button" aria-pressed="true"  target="_blank">YouTube</a></li>
+                                                <li><a href="<%= youtuber.twitterLink %>" class="btn btn-lg btn-block active twitterLink" role="button" aria-pressed="true"  target="_blank">Twitter</a></li>
+                                                <li><a href="<%= youtuber.facebookLink %>" class="btn btn-lg btn-block active facebookLink" role="button" aria-pressed="true"  target="_blank">Facebook</a></li>
+                                                <li><a href="<%= youtuber.instaLink %>" class="btn btn-lg btn-block active instaLink" role="button" aria-pressed="true"  target="_blank">Instagram</a></li>
+                                            </ul>
+                                      </div>
+                                </div>
+                        
                 </div>
             </div>
+        <div class="col-md-2">
+        </div>
+                      <% if(youtuber.twitchLink != null){ %>
+                          <div class"row" id="twitch">
+                              <!--<div class="col-md-9">-->
+                                  <!-- Add a placeholder for the Twitch embed -->
+                                        <div id="twitch-embed"></div>
+                                    
+                                        <!-- Load the Twitch embed script -->
+                                        <script src="https://embed.twitch.tv/embed/v1.js"></script>
+                                    
+                                        <!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. -->
+                                        <script type="text/javascript">
+                                          new Twitch.Embed("twitch-embed", {
+                                            width: 864,
+                                            height: 486,
+                                            channel: "<%= youtuber.twitchId %>"
+                                          });
+                                        </script>
+                                        
+                              <!--</div>-->
+                          </div>
+                      <% } %>
+                      
+                      <div class="row" id="recentUploads">
+                          <h2>Recent Uploads</h2>
+                          <div class="card-deck">
+                            <%  for(var i = youtuber.uploads.length - 1; i > youtuber.uploads.length - 7; i--) { %>
+                            
+                            
+                              <div class="col-xl-4">
+                                <div class="card" style="width: 281px;">
+                                  <iframe width="280" height="157.5" src="https://www.youtube.com/embed/<%= youtuber.uploads[i].link %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                  <div class="card-body">
+                                    <h5 class="card-title"><%= youtuber.uploads[i].title %></h5>
+                                    <p class="card-text"><small class="text-muted"><%= youtuber.uploads[i].date.toDateString(); %></small></p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <% }; %>
+                          </div>
+                      </div>
+                </div>
             
             <% include ../partials/footer %>

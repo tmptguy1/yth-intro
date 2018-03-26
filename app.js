@@ -3,10 +3,13 @@ var express    = require("express"),
     bodyParser = require("body-parser"),
     reddit     = require("redwrap"),
     Topgamevid = require("./models/topgamevid"),
+    Upload = require("./models/upload"),
     Youtuber = require("./models/youtuber"),
     mongoose   = require("mongoose"),
     todaysDate = Date.now();
     // Redditpost = require("./models/redditpost");
+
+
 
     //requiring routes
     var registryRoutes    = require("./routes/registry");

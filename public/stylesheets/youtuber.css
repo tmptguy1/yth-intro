@@ -1,0 +1,52 @@
+#socialLinks {
+    list-style-type: none;
+    
+}
+
+#socialLinks li {
+    padding-bottom: 5px;
+}
+
+.ytLink {
+    background-color: #e52d27;
+    color: white;
+}
+
+.ytLink:hover{
+    background-color: #b31217;
+    color: white;
+}
+
+.twitterLink {
+    background-color: #1DA1F2;
+    color: white;
+}
+
+.twitterLink:hover{
+    background-color: #0084b4;
+    color: white;
+}
+
+.facebookLink {
+    background-color: #3B5998;
+    color: white;
+}
+
+.facebookLink:hover{
+    background-color: #23355b;
+    color: white;
+}
+
+.instaLink {
+    background-color: #bc2a8d;
+    color: white;
+}
+
+.instaLink:hover{
+    background-color: #8a3ab9;
+    color: white;
+}
+
+#recentUploads .card-deck{
+    margin-right: 2px;
+}
