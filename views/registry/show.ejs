@@ -3,15 +3,29 @@
 <!--<div class="container">-->
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">YouTube Home Page</p>
+          <% if(youtuber.schedules[0] != null){ %>
+            <p class="lead">Schedule</p>
             <div class="list-group">
-                <li class="list-group-item active">Info 1</li>
-                <li class="list-group-item">Info 2</li>
-                <li class="list-group-item">Info 3</li>
+                <li class="list-group-item"><strong>Uploads: </strong><%= youtuber.schedules[0].uploadFrequency %></li>
+                <li class="list-group-item"><strong>Streams: </strong><%= youtuber.schedules[0].streamLocation %></li>
+                <li class="list-group-item"><strong>Sunday: </strong><%= youtuber.schedules[0].sunday %></li>
+                <li class="list-group-item"><strong>Monday: </strong><%= youtuber.schedules[0].monday %></li>
+                <li class="list-group-item"><strong>Tuesday: </strong><%= youtuber.schedules[0].tuesday %></li>
+                <li class="list-group-item"><strong>Wednesday: </strong><%= youtuber.schedules[0].wednesday %></li>
+                <li class="list-group-item"><strong>Thursday: </strong><%= youtuber.schedules[0].thursday %></li>
+                <li class="list-group-item"><strong>Friday: </strong><%= youtuber.schedules[0].friday %></li>
+                <li class="list-group-item"><strong>Saturday: </strong><%= youtuber.schedules[0].saturday %></li>
+                <li class="list-group-item"><strong>Time Zone: </strong><%= youtuber.schedules[0].timeZone %></li>
+                <li class="list-group-item"><a class="btn btn-xs btn-warning float-center" href="/registry/<%= youtuber._id %>/schedule/<%= youtuber.schedules[0].id %>/edit">Edit</a>
+                   <form class="float-center" id="delete-form" action="/registry/<%= youtuber._id %>/schedule/<%= youtuber.schedules[0].id %>?_method=DELETE" method="POST" style="display: inline;">
+                                  <button class="btn btn-xs btn-danger">Delete</button>
+                                </form>
+                </li>
             </div>
+            <% } %>
             <div id="twitter">
                 <% if(youtuber.twitterLink != null){ %>
-                      <a class="twitter-timeline" data-height="650" data-theme="dark" href="<%= youtuber.twitterLink %>">Tweets by MrMuselk</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                      <a class="twitter-timeline" data-height="650" data-theme="dark" href="<%= youtuber.twitterLink %>">Twitter</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                       <% } %>
             </div>
             <div id="instagram">
@@ -32,60 +46,116 @@
                                       </div>
                                       <div class="col-md-3">
                                           
-                                            <ul id="socialLinks">
-                                                <li><a href="<%= youtuber.ytLink %>" class="btn btn-lg btn-block active ytLink" role="button" aria-pressed="true"  target="_blank">YouTube</a></li>
-                                                <li><a href="<%= youtuber.twitterLink %>" class="btn btn-lg btn-block active twitterLink" role="button" aria-pressed="true"  target="_blank">Twitter</a></li>
-                                                <li><a href="<%= youtuber.facebookLink %>" class="btn btn-lg btn-block active facebookLink" role="button" aria-pressed="true"  target="_blank">Facebook</a></li>
-                                                <li><a href="<%= youtuber.instaLink %>" class="btn btn-lg btn-block active instaLink" role="button" aria-pressed="true"  target="_blank">Instagram</a></li>
-                                            </ul>
+                                            
                                       </div>
                                 </div>
+                                <div class="row" id="socialLinks">
+                                  <div class="col-md-3">
+                                     <a href="<%= youtuber.ytLink %>" class="btn btn-lg btn-block active ytLink" role="button" aria-pressed="true"  target="_blank">YouTube</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                      <a href="<%= youtuber.twitterLink %>" class="btn btn-lg btn-block active twitterLink" role="button" aria-pressed="true"  target="_blank">Twitter</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                      <a href="<%= youtuber.facebookLink %>" class="btn btn-lg btn-block active facebookLink" role="button" aria-pressed="true"  target="_blank">Facebook</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                      <a href="<%= youtuber.instaLink %>" class="btn btn-lg btn-block active instaLink" role="button" aria-pressed="true"  target="_blank">Instagram</a>
+                                    </div>
+                                  
+                                  </div>
                         
+                  </div>
+              </div>
+          <div class="col-md-2">
+          </div>
+        
+          <% if(youtuber.notices[0] != undefined) { %>
+             <% youtuber.notices.forEach(function(notice) { %>
+                <div class="row">
+                  <div class="col-md-12" id="notice">
+                          <div class="card border text-white bg-dark mb-3">
+                            <div class="card-body" id="cardNotice">
+                              <h5 class="card-title" id="noticeTitle"><%= notice.title %> <a class="btn btn-xs btn-warning float-right" href="/registry/<%= youtuber._id %>/notice/<%= notice._id %>/edit">Edit</a>
+                                <form class="float-right" id="delete-form" action="/registry/<%= youtuber._id %>/notice/<%= notice._id %>?_method=DELETE" method="POST" style="display: inline;">
+                                  <button class="btn btn-xs btn-danger">Delete</button>
+                                </form>
+                              </h5>
+                              <p id="noticeContent"><%= notice.content %></p>
+                                  <% if(notice.link != null) { %>
+                                      <a href="<%= notice.link %>" class="btn btn-lg active btn-primary" role="button" aria-pressed="true"  target="_blank"><%= notice.linkLabel %></a>
+                                  <% } %>
+                            </div>
+                          </div>
+                  </div>
+                </div>
+              <% }); %>
+          <% } %>
+          
+          <% if(youtuber.twitchLink != null){ %>
+              <div class"row" id="twitch">
+                  <!--<div class="col-md-9">-->
+                      <!-- Add a placeholder for the Twitch embed -->
+                            <div class="embed-responsive embed-responsive-21by9" id="twitch-embed"></div>
+                              <div class="embed-responsive-item">
+                            <!-- Load the Twitch embed script -->
+                            <script src="https://embed.twitch.tv/embed/v1.js"></script>
+                        
+                            <!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. -->
+                            <script type="text/javascript">
+                              new Twitch.Embed("twitch-embed", {
+                                width: 864,
+                                height: 486,
+                                channel: "<%= youtuber.twitchId %>"
+                              });
+                            </script>
+                            </div>
+                  <!--</div>-->
+              </div>
+          <% } %>
+          
+          <% if(youtuber.uploads[0] != undefined) { %>
+            <div class="row" id="recentUploads">
+                <h2>Recent Uploads</h2>
+                <div class="card-deck">
+                  <%  for(var i = youtuber.uploads.length - 1; i > youtuber.uploads.length - 7; i--) { %>
+                  
+                  
+                    <div class="col-xl-4">
+                      <div class="card">
+                        <div class="embed-responsive embed-responsive-16by9">
+                          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<%= youtuber.uploads[i].link %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <div class="card-body">
+                          <h5 class="card-title"><%= youtuber.uploads[i].title %></h5>
+                          <p class="card-text"><small class="text-muted"><%= youtuber.uploads[i].date.toDateString(); %></small></p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <% }; %>
                 </div>
             </div>
-        <div class="col-md-2">
-        </div>
-                      <% if(youtuber.twitchLink != null){ %>
-                          <div class"row" id="twitch">
-                              <!--<div class="col-md-9">-->
-                                  <!-- Add a placeholder for the Twitch embed -->
-                                        <div id="twitch-embed"></div>
-                                    
-                                        <!-- Load the Twitch embed script -->
-                                        <script src="https://embed.twitch.tv/embed/v1.js"></script>
-                                    
-                                        <!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. -->
-                                        <script type="text/javascript">
-                                          new Twitch.Embed("twitch-embed", {
-                                            width: 864,
-                                            height: 486,
-                                            channel: "<%= youtuber.twitchId %>"
-                                          });
-                                        </script>
-                                        
-                              <!--</div>-->
+          <% } %>
+          
+          <% if(youtuber.blogs[0] != undefined) { %>
+             <% youtuber.blogs.forEach(function(blog) { %>
+                <div class="row">
+                  <div class="col-md-12" id="blog">
+                          <div class="card border bg-light mb-3">
+                            <div class="card-body" id="cardBlog">
+                              <h5 class="card-title" id="noticeTitle"><%= blog.title %> <a class="btn btn-xs btn-warning float-right" href="/registry/<%= youtuber._id %>/blogs/<%= blog._id %>/edit">Edit</a>
+                                <form class="float-right" id="delete-form" action="/registry/<%= youtuber._id %>/blogs/<%= blog._id %>?_method=DELETE" method="POST" style="display: inline;">
+                                  <button class="btn btn-xs btn-danger">Delete</button>
+                                </form>
+                              </h5>
+                              <p id="blogContent"><%= blog.content %></p>
+                            </div>
                           </div>
-                      <% } %>
-                      
-                      <div class="row" id="recentUploads">
-                          <h2>Recent Uploads</h2>
-                          <div class="card-deck">
-                            <%  for(var i = youtuber.uploads.length - 1; i > youtuber.uploads.length - 7; i--) { %>
-                            
-                            
-                              <div class="col-xl-4">
-                                <div class="card" style="width: 281px;">
-                                  <iframe width="280" height="157.5" src="https://www.youtube.com/embed/<%= youtuber.uploads[i].link %>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                  <div class="card-body">
-                                    <h5 class="card-title"><%= youtuber.uploads[i].title %></h5>
-                                    <p class="card-text"><small class="text-muted"><%= youtuber.uploads[i].date.toDateString(); %></small></p>
-                                  </div>
-                                </div>
-                              </div>
-                              
-                              <% }; %>
-                          </div>
-                      </div>
+                  </div>
                 </div>
+              <% }); %>
+          <% } %>
+    </div>
             
-            <% include ../partials/footer %>
+<% include ../partials/footer %>

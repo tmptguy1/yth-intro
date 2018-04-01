@@ -1,12 +1,13 @@
 var request = require("request");
 var Upload = require("./models/upload");
 
-function findUploads(req, res, foundYoutuber){
+function findLatestVids(req, res, foundYoutuber){
         request(
-               {url: "https://www.googleapis.com/youtube/v3/playlistItems?", qs:{
-                part: "snippet,contentDetails",
+               {url: "https://www.googleapis.com/youtube/v3/search?", qs:{
+                part: "snippet",
                 maxResults: "6",
-                playlistId: foundYoutuber.uploadPlaylist,
+                channelId: foundYoutuber.ytUserId,
+                order: "date",
                 key: process.env.YOUTUBE_API_KEY
                }}, function(err, response, body){
                   if(err){
@@ -16,8 +17,8 @@ function findUploads(req, res, foundYoutuber){
                     var data = JSON.parse(body);
                     for(var i=0; i < data["items"].length; i++){
                       console.log("how many times is this running   " + i);
-                      var uploadLink = data["items"][i]["contentDetails"]["videoId"];
-                      var date = data["items"][i]["contentDetails"]["videoPublishedAt"];
+                      var uploadLink = data["items"][i]["id"]["videoId"];
+                      var date = data["items"][i]["snippet"]["publishedAt"];
                       var title = data["items"][i]["snippet"]["title"];
                       
                       var newUpload = {link: uploadLink, date: date, title: title};
@@ -45,4 +46,4 @@ function findUploads(req, res, foundYoutuber){
                });
 }
 
-module.exports = findUploads;
+module.exports = findLatestVids;

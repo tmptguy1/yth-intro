@@ -1,0 +1,64 @@
+<% include ../partials/header %>
+
+<!--<div class="container">-->
+    <h1 style="text-align: center">Create a Schedule</h1>
+    <div class="row">
+        <div style="width:40%; margin: 25px auto;">
+    
+    
+            <form action="/registry/<%= youtuber._id %>/schedule/<%= schedule._id %>?_method=PUT" method="POST">
+                <div class="form-group">
+                    <label for="uploads">Uploads</label>
+                    <input class="form-control" type="text" name="schedule[uploadFrequency]" id="uploads" value="<%= schedule.uploadFrequency %>">
+                </div>
+                <div class="form-group">
+                    <label for="streamLocation">Stream Location</label>
+                    <input class="form-control" type="text" name="schedule[streamLocation]" id="streamLocation" value="<%= schedule.streamLocation %>">
+                </div>
+                <div class="form-group">
+                    <label for="sunday">Sunday</label>
+                    <input class="form-control" type="text" name="schedule[sunday]" id="sunday" value="<%= schedule.sunday %>">
+                </div>
+                <div class="form-group">
+                    <label for="monday">Monday</label>
+                    <input class="form-control" type="text" name="schedule[monday]" id="monday" value="<%= schedule.monday %>">
+                </div>
+                <div class="form-group">
+                    <label for="tuesday">Tuesday</label>
+                    <input class="form-control" type="text" name="schedule[tuesday]" id="tuesday" value="<%= schedule.tuesday %>">
+                </div>
+                <div class="form-group">
+                    <label for="wednesday">Wednesday</label>
+                    <input class="form-control" type="text" name="schedule[wednesday]" id="wednesday" value="<%= schedule.wednesday %>">
+                </div>
+                <div class="form-group">
+                    <label for="thursday">Thursday</label>
+                    <input class="form-control" type="text" name="schedule[thursday]" id="thursday" value="<%= schedule.thursday %>">
+                </div>
+                <div class="form-group">
+                    <label for="friday">Friday</label>
+                    <input class="form-control" type="text" name="schedule[friday]" id="friday" value="<%= schedule.friday %>">
+                </div>
+                <div class="form-group">
+                    <label for="saturday">Saturday</label>
+                    <input class="form-control" type="text" name="schedule[saturday]" id="saturday" value="<%= schedule.saturday %>">
+                </div>
+                <div class="form-group">
+                    <label for="timeZone">Time Zone</label>
+                    <input class="form-control" type="text" name="schedule[timeZone]" id="timeZone" value="<%= schedule.timeZone %>">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+                </div>
+                
+                
+                
+                </form>
+                <p><a href = "/registry/<%= youtuber._id %>">Go Back</a></p>
+        </div>
+        
+        
+    </div>
+<!--</div>-->
+    
+<% include ../partials/footer %>

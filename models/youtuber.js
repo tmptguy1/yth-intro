@@ -17,6 +17,7 @@ var youtuberSchema = new mongoose.Schema({
    twitchId: String,
    twitchLink: String,
    storeLink: String,
+   patreonLink: String,
    description: String,
    location: String,
    image: String,
@@ -30,8 +31,25 @@ var youtuberSchema = new mongoose.Schema({
          type: mongoose.Schema.Types.ObjectId,
          ref: "Upload"
       }
+   ],
+   schedules: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Schedule"
+      }
+   ],
+   notices: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Notice"
+      }
+   ],
+   blogs: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Blog"
+      }
    ]
-   
 });
  
 module.exports = mongoose.model("Youtuber", youtuberSchema);

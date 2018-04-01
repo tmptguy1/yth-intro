@@ -1,3 +1,7 @@
+h2 {
+    margin-left: 15px;
+}
+
 #socialLinks {
     list-style-type: none;
     
@@ -50,3 +54,25 @@
 #recentUploads .card-deck{
     margin-right: 2px;
 }
+
+#socialLinks {
+    padding-top: 20px;
+}
+
+.jumbotron {
+    padding-bottom: 32px;
+    padding-top: 32px;
+}
+
+#notice {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    padding-left: 5px;
+    padding-right: 25px;
+}
+
+#cardNotice {
+    width: 100%;
+}
+
