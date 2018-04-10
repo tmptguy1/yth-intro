@@ -2,7 +2,7 @@ var request  = require("request"),
     cheerio  = require("cheerio"),
     Youtuber = require("../models/youtuber");
 
-function findLinks(req, res, foundYoutuber){
+function findLinks(foundYoutuber){
     request(foundYoutuber.ytLink, function(error, response, body) {
               if(error) { return  console.error('There was an error!'); }
               

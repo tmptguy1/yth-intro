@@ -1,9 +1,14 @@
 var reddit     = require("redwrap"),
-    Topgamevid = require("../models/topgamevid");
+    Topgamevid = require("../models/topgamevid"),
+    getChannelId  = require("./getChannelId.js"),
+    createYoutuber     = require("./createYoutuber.js");
 
 
 function findTopGameVids(sub){
-  reddit.r(sub).limit(50, function(err, data, res){
+    console.log(sub);
+  reddit.r(sub).limit(75, function(err, data, res){
+      console.log(data);
+      console.log(sub);
      //lists out all of the youtube links on /r/gaming  first data is for variable, second is for the json structure
       data.data.children.forEach(function(item){
           
@@ -20,6 +25,9 @@ function findTopGameVids(sub){
                   var link = longLink.slice(longLink.indexOf('embed/') + 6, longLink.indexOf('embed') + 17);
                   var author = item.data.secure_media.oembed.author_name;
                   
+                  
+                                      
+                  
                   Topgamevid.findOne({link: link}, function(err, res){
                       if(res){
                           console.log(item.data.url);
@@ -34,8 +42,11 @@ function findTopGameVids(sub){
                                       console.log(err);
                                   } else{
                                       console.log(newlyCreated);
+                                      getChannelId(link);
+                                      
                                     }
                                 });
+                                
                             }
                         });
                           
@@ -44,6 +55,7 @@ function findTopGameVids(sub){
           
               }
               }
+              
           });
         }); 
 }

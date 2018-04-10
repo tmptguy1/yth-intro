@@ -1,7 +1,7 @@
 var request = require("request");
 var Upload = require("./models/upload");
 
-function findLatestVids(req, res, foundYoutuber){
+function findLatestVids(foundYoutuber){
         request(
                {url: "https://www.googleapis.com/youtube/v3/search?", qs:{
                 part: "snippet",
@@ -30,7 +30,7 @@ function findLatestVids(req, res, foundYoutuber){
                         console.log("Is this creating too many uploads  " + i);
                         if(err){
                             // req.flash('error', err.message);
-                            return res.redirect('back');
+                            
                         } else {
                           
                           

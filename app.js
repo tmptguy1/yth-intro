@@ -2,12 +2,15 @@ var express         = require("express"),
     app             = express(),
     bodyParser      = require("body-parser"),
     reddit          = require("redwrap"),
+    cron            = require('cron'),
     Topgamevid      = require("./models/topgamevid"),
     Upload          = require("./models/upload"),
     Youtuber        = require("./models/youtuber"),
     methodOverride  = require("method-override"),
     mongoose        = require("mongoose"),
     todaysDate      = Date.now(),
+    createYoutuber  = require("./functions/createYoutuber.js"),
+    getChannelId  = require("./functions/getChannelId.js"),
     findTopGameVids = require("./functions/findTopGameVids.js");
     // Redditpost = require("./models/redditpost");
 
@@ -33,6 +36,18 @@ app.use("/registry", registryRoutes);
 app.use(scheduleRoutes);
 app.use(noticeRoutes);
 app.use(blogRoutes);
+
+//cronjob to get youtube links
+var sub = "games"
+var job = new cron.CronJob('00 52 19 * * *', function() {
+  findTopGameVids(sub);
+  console.log("job ran");
+}, null, true, 'America/Los_Angeles');
+
+// var CronJob = require('cron').CronJob;
+// new CronJob('00 00 23 * * *', findTopGameVids(sub) {
+//   console.log('Job ran');
+// }, null, true, 'America/Los_Angeles');
 
 
 app.get("/", function(req, res){
@@ -76,15 +91,25 @@ app.get("/", function(req, res){
                                      current: pageNumber,
                                      pages: Math.ceil(count / perPage)
                                  });
+                                // getChannelId("_K1ocyRKGdA");
+                                
                              }
                         });
                  }
         });
     });
+    
+    
 
  
-//  findTopGameVids('games');
-           
+//  findTopGameVids(req, res, sub);
+    // getChannelId(req, res, "_K1ocyRKGdA", function(channelId){
+    //     console.log(channelId);
+    // });
+    // var channelId = getChannelId(req, res, "_K1ocyRKGdA");
+    // console.log(channelId);
+    // createYoutuber(req, res, channelId);
+          
 
 
 }); 

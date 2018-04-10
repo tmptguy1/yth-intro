@@ -1,11 +1,12 @@
 var request = require("request");
+var createYoutuber = require("./createYoutuber.js");
 
 
-function getChannelId(req, res, videoId){
-        request(
+function getChannelId(videoId){
+         request(
                {url: "https://www.googleapis.com/youtube/v3/videos", qs:{
                 part: "snippet",
-                videoId: videoId,
+                id: videoId,
                 key: process.env.YOUTUBE_API_KEY
                }}, function(err, response, body){
                   if(err){
@@ -13,18 +14,14 @@ function getChannelId(req, res, videoId){
                   } else{
                     
                     var data = JSON.parse(body);
-                    for(var i=0; i < data["items"].length; i++){
-                      console.log("how many times is this running   " + i);
-                      var channelId = data["items"][i]["snippet"]["channelId"];
-                    
+                    console.log(data);
+                    // for(var i=0; i < 1; i++){
+                    //   console.log("how many times is this running   " + i);
+                      var channelId = data["items"][0]["snippet"]["channelId"];
+                        console.log(channelId);
                       
-                      return channelId;
-                      
-                      
-                    
-                      
-                      
-                    };
+                      createYoutuber(channelId);
+                    // };
                   }
                });
 }

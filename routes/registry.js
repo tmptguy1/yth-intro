@@ -6,6 +6,7 @@ var Schedule = require("../models/schedule");
 var Notice   = require("../models/notice");
 var request = require("request");
 var youtubeSearch = require("youtube-search");
+var createYoutuber = require("../functions/createYoutuber.js");
 var findUploads   = require("../findUploads.js");
 var findLatestVids   = require("../findLatestVids.js");
 var findLinks     = require("../functions/findLinks.js");
@@ -52,58 +53,62 @@ router.post("/", function(req, res) {
     youtubeSearch(name, opts, function(err, results) {
       if(err){ return console.log(err);}
     
-      //console.dir(results);
+      // console.dir(results);
+      var ytId = results[0].channelId;
+      createYoutuber(ytId);
       
-      //retrieve uploaded playlist from youtube API
+    //   //retrieve uploaded playlist from youtube API
       
     
-    //Create a new Youtuber and save to DB, this saves just the first response
+    // //Create a new Youtuber and save to DB, this saves just the first response
 
       
-      var ytName = results[0].channelTitle;
-      var desc = results[0].description;
-      var ytId = results[0].channelId;
-      var link = results[0].link;
+    //   var ytName = results[0].channelTitle;
+    //   var desc = results[0].description;
+    //   
+    //   var link = results[0].link;
       
       
-      //get thumbnails from YT API
-      console.log(results[0].thumbnails.default.url)
+    //   //get thumbnails from YT API
+    //   console.log(results[0].thumbnails.default.url)
       
-      var thumbSmall = results[0].thumbnails.default.url;
-      var thumbMed = results[0].thumbnails.medium.url;
-      var thumbLarge = results[0].thumbnails.high.url;
+    //   var thumbSmall = results[0].thumbnails.default.url;
+    //   var thumbMed = results[0].thumbnails.medium.url;
+    //   var thumbLarge = results[0].thumbnails.high.url;
       
      
-     request(
-       {url: "https://www.googleapis.com/youtube/v3/channels?", qs:{
-        part: "snippet,contentDetails,statistics",
-        id: ytId,
-        key: process.env.YOUTUBE_API_KEY
-       }}, function(err, response, body){
-          if(err){
-            console.log(err);
-          }
-          var data = JSON.parse(body);
-          console.log(data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]);
-          var uploadPlaylist = data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"];
+    // request(
+    //   {url: "https://www.googleapis.com/youtube/v3/channels?", qs:{
+    //     part: "snippet,contentDetails,statistics",
+    //     id: ytId,
+    //     key: process.env.YOUTUBE_API_KEY
+    //   }}, function(err, response, body){
+    //       if(err){
+    //         console.log(err);
+    //       }
+    //       var data = JSON.parse(body);
+    //       console.log(data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]);
+    //       var uploadPlaylist = data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"];
           
-           var newYoutuber= {ytUsername: ytName, ytUserId: ytId, ytLink: link, uploadPlaylist: uploadPlaylist, description: desc, thumbSmall: thumbSmall, thumbMed: thumbMed, thumbLarge: thumbLarge};
-            Youtuber.create(newYoutuber, function(err, newlyCreated){
-              if(err){
-                  req.flash('error', err.message);
-                  return res.redirect('back');
-              } else {
-                  //redirect to the new Youtuber page
-                  //console.log(newlyCreated);
-                  //res.redirect('/registry' + newlyCreated.id);
+    //       var newYoutuber= {ytUsername: ytName, ytUserId: ytId, ytLink: link, uploadPlaylist: uploadPlaylist, description: desc, thumbSmall: thumbSmall, thumbMed: thumbMed, thumbLarge: thumbLarge};
+            
+    //         Youtuber.create(newYoutuber, function(err, newlyCreated){
+    //           if(err){
+    //               req.flash('error', err.message);
+    //               return res.redirect('back');
+    //           } else {
+    //               //redirect to the new Youtuber page
+    //               //console.log(newlyCreated);
+    //               //res.redirect('/registry' + newlyCreated.id);
                  
-                findLatestVids(req, res, newlyCreated);
-                findLinks(req, res, newlyCreated);
-                  res.redirect("/registry");
-              }
-          });
-       });
+    //             findLatestVids(newlyCreated);
+    //             findLinks(newlyCreated);
+    //               res.redirect("/registry");
+    //           }
+    //       });
+    //   });
       
+      res.redirect("/registry");
      
     });
   
