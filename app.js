@@ -39,15 +39,11 @@ app.use(blogRoutes);
 
 //cronjob to get youtube links
 var sub = "games"
-var job = new cron.CronJob('00 52 19 * * *', function() {
+var job = new cron.CronJob('00 13 18 * * *', function() {
   findTopGameVids(sub);
   console.log("job ran");
 }, null, true, 'America/Los_Angeles');
 
-// var CronJob = require('cron').CronJob;
-// new CronJob('00 00 23 * * *', findTopGameVids(sub) {
-//   console.log('Job ran');
-// }, null, true, 'America/Los_Angeles');
 
 
 app.get("/", function(req, res){

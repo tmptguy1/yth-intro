@@ -1,0 +1,54 @@
+<% include ../partials/header %>
+
+<!--<div class="container">-->
+    <h1 style="text-align: center">Search Again</h1>
+    <div class="row">
+        <div style="width:40%; margin: 25px auto;">
+    
+    
+            <form action="/registry" method="POST">
+                <div class="form-group">
+                    <label for="creatorName">Creator's Name</label>
+                    <input class="form-control" id="creatorName" type="text" name="name" placeholder="name">
+                </div>
+                <div class="form-group">
+                    <label for="ytUserID">YouTube User ID</label>
+                    <input class="form-control" id="ytUserID" type="text" name="ytUserID" placeholder="User ID">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+                </div>
+                </form>
+                
+                
+                <p><a href = "/">Go Back</a></p>
+        </div>
+        
+        
+    </div>
+    <div class="row">
+    
+    <% youtubers.forEach(function(youtuber){ %>
+                <div class="col-md-3 col-sm-6">
+                    <div class="img-thumbnail mx-auto">
+                        <img src="<%= youtuber.image %>" class = "img-fluid">
+                        <div class="caption">
+                            <h4><%= youtuber.title %></h4>
+                        </div>
+                        <form action="/registry/add" method="POST">
+                            <div class="form-group">
+                                <label for="creatorName">Creator's Name</label>
+                                <input class="form-control" id="creatorName" type="text" name="channelId" value="<%= youtuber.channelId %>">
+                            </div>
+                        <div class="form-group">
+                            <button class="btn btn-lg btn-primary btn-block">Select!</button>
+                        </div>
+                        </form>
+                    </div>
+                    
+                </div>
+                <% }); %>
+    </div>
+<!--</div>-->
+    
+<% include ../partials/footer %>

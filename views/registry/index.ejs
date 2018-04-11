@@ -1,16 +1,22 @@
 <% include ../partials/header %>
 
 
-<!--<div class="container">-->
-    <header class = "jumbotron">
-        <div class="container">
+<div class="row">
+        <div class="col-md-3">
+          
+        </div>
+        <div class="col-md-8">
+            <div class="jumbotron jumbotron">
+                
+                <div class="container-fluid">
+
             <h1>Welcome to the YouTube Registry</h1>
             <p>Find the best content creators in a wide variety of categories!</p>
             <p>
                 <a class="btn btn-primary btn-lg" href="/registry/new">Add New Creator</a>
                 </p>
         </div>
-    </header>
+    </div>
     
     
     <!--Cold needed to add the style tags here so they would wrap but mine worked without it-->
@@ -19,8 +25,8 @@
          <div class="col-md-12">
              <h3>No creators match your search, please search again.</h3>
              <p>
-                <form class="form-inline justify-content-center" action="/campgrounds" method="GET">
-                          <input class="form-control mr-sm-2" name="search" type="search" placeholder="Campground Search" aria-label="Search">
+                <form class="form-inline justify-content-center" action="/registry" method="GET">
+                          <input class="form-control mr-sm-2" name="search" type="search" placeholder="Find Creator" aria-label="Search">
                           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                         </form>
             </p>
@@ -44,6 +50,50 @@
         
     </div>
     
+    <nav aria-label="Youtuber page navigation">
+    <% if (pages && pages > 0) { %>
+    <ul class="pagination justify-content-center">
+        <% if (current == 1) { %>
+        <li class="page-item disabled"><a class="page-link">First</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/registry">First</a></li>
+        <% } %>
+ 
+        <% if (current == 1) { %>
+        <li class="disabled"><a class="page-link">«</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/registry?page=<%= Number(current) - 1 %>">«</a></li>
+        <% } %>
+ 
+        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+        <% if (i !== 1) { %>
+        <li class="disabled"><a class="page-link">...</a></li>
+        <% } %>
+        <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+        <% if (i == current) { %>
+        <li class="active"><a class="page-link"><%= i %></a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/registry?page=<%= i %>"><%= i %></a></li>
+        <% } %>
+        <% if (i == Number(current) + 4 && i < pages) { %>
+        <li class="disabled"><a class="page-link">...</a></li>
+        <% } %>
+        <% } %>
+ 
+        <% if (current == pages) { %>
+        <li class="disabled"><a class="page-link">»</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/registry?page=<%= Number(current) + 1 %>">»</a></li>
+        <% } %>
+ 
+        <% if (current == pages) { %>
+        <li class="disabled"><a class="page-link">Last</a></li>
+        <% } else { %>
+        <li><a class="page-link" href="/registry?page=<%= pages %>">Last</a></li>
+        <% } %>
+    </ul>
+    <% } %>
+</nav>
 
     
 <!--</div>-->

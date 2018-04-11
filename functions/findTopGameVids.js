@@ -6,7 +6,7 @@ var reddit     = require("redwrap"),
 
 function findTopGameVids(sub){
     console.log(sub);
-  reddit.r(sub).limit(75, function(err, data, res){
+  reddit.r(sub).limit(50, function(err, data, res){
       console.log(data);
       console.log(sub);
      //lists out all of the youtube links on /r/gaming  first data is for variable, second is for the json structure

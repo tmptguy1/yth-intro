@@ -119,7 +119,7 @@
                 <h2>Recent Uploads</h2>
                 <div class="card-deck">
                   <%  for(var i = youtuber.uploads.length - 1; i > youtuber.uploads.length - 7; i--) { %>
-                  
+                    <% if(youtuber.uploads[i] != undefined) { %>
                   
                     <div class="col-xl-4">
                       <div class="card">
@@ -132,7 +132,7 @@
                         </div>
                       </div>
                     </div>
-                    
+                    <% }; %>
                     <% }; %>
                 </div>
             </div>

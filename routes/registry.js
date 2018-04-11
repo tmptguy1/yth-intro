@@ -5,7 +5,6 @@ var Upload = require("../models/upload");
 var Schedule = require("../models/schedule");
 var Notice   = require("../models/notice");
 var request = require("request");
-var youtubeSearch = require("youtube-search");
 var createYoutuber = require("../functions/createYoutuber.js");
 var findUploads   = require("../findUploads.js");
 var findLatestVids   = require("../findLatestVids.js");
@@ -21,17 +20,61 @@ const cheerio = require('cheerio');
 
 //INDEX - show all Youtbers
 router.get("/", function(req, res){
-    // Get all Youtbers from DB
-    Youtuber.find({}, function(err, allYoutubers){
-      if(err){
-          console.log(err);
-      } else {
-              console.log(allYoutubers.length);
-                res.render("registry/index",{youtubers:allYoutubers});
+    var perPage = 8;
+    var pageQuery = parseInt(req.query.page);
+    var pageNumber = pageQuery ? pageQuery : 1;
+    
+    if(req.query.search){
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        // Get fuzzy match youtubers from DB
+        Youtuber.find({ytUsername: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function (err, allYoutubers) {
+                Youtuber.count({ytUsername: regex}).exec(function (err, count) {
+                   if(err){
+                       console.log(err);
+                       res.redirect("back");
+                   } else {
+                       console.log(allYoutubers.length);
+                     res.render("registry/index", {
+                                youtubers: allYoutubers,
+                                current: pageNumber,
+                                pages: Math.ceil(count / perPage),
+                                search: req.query.search
+                            });
+                   }
+                });
+        });
+        } else{
+            
+        
+        // Get all Youtubers from DB
+        Youtuber.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function (err, allYoutubers) {
+            Youtuber.count().exec(function (err, count) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.render("registry/index", {
+                        youtubers: allYoutubers,
+                        current: pageNumber,
+                        pages: Math.ceil(count / perPage)
+                    });
+                }
+            });
+        });
+    }
+    
+    
+    // // Get all Youtbers from DB
+    // Youtuber.find({}, function(err, allYoutubers){
+    //   if(err){
+    //       console.log(err);
+    //   } else {
+    //           console.log(allYoutubers.length);
+    //             res.render("registry/index",{youtubers:allYoutubers});
 
-            }
+    //         }
       
-    });
+    // });
+    
 });
 
 //CREATE - add new Youtuber to DB
@@ -44,73 +87,64 @@ router.post("/", function(req, res) {
 
     console.log(name);
     
-    //call out to Youtube API
-    var opts = {
-      maxResults: 5,
-      key: process.env.YOUTUBE_API_KEY
-    };
+    // //call out to Youtube API
+    // var opts = {
+    //   maxResults: 5,
+    //   key: process.env.YOUTUBE_API_KEY
+    // };
     
-    youtubeSearch(name, opts, function(err, results) {
-      if(err){ return console.log(err);}
+    var searchResults = [];
     
-      // console.dir(results);
-      var ytId = results[0].channelId;
-      createYoutuber(ytId);
+        request(
+               {url: "https://www.googleapis.com/youtube/v3/search", qs:{
+                part: "snippet",
+                q: name,
+                type: "channel",
+                maxResults: 5,
+                key: process.env.YOUTUBE_API_KEY
+               }}, function(err, response, body){
+                  if(err){
+                    console.log(err);
+                  } else{
+                    
+                    var data = JSON.parse(body);
+                    console.log(data);
+                    console.log(data["items"].length);
+                      for(var i=0; i < data["items"].length; i++){
+                        console.log("how many times is this running   " + i);
+                          var channelId = data["items"][i]["snippet"]["channelId"];
+                          var title = data["items"][i]["snippet"]["title"];
+                          var image = data["items"][i]["snippet"]["thumbnails"]["default"]["url"];
+                          
+                          console.log(channelId);
+                          console.log(title);
+                          console.log(image);
+                          
+                          searchResults.push({channelId: channelId, title: title, image: image});
+                          
+                      }
+                        res.render("registry/add", {youtubers: searchResults});
+                      console.log(searchResults);
+                            // console.log(channelId);
       
-    //   //retrieve uploaded playlist from youtube API
       
-    
-    // //Create a new Youtuber and save to DB, this saves just the first response
-
-      
-    //   var ytName = results[0].channelTitle;
-    //   var desc = results[0].description;
-    //   
-    //   var link = results[0].link;
-      
-      
-    //   //get thumbnails from YT API
-    //   console.log(results[0].thumbnails.default.url)
-      
-    //   var thumbSmall = results[0].thumbnails.default.url;
-    //   var thumbMed = results[0].thumbnails.medium.url;
-    //   var thumbLarge = results[0].thumbnails.high.url;
-      
-     
-    // request(
-    //   {url: "https://www.googleapis.com/youtube/v3/channels?", qs:{
-    //     part: "snippet,contentDetails,statistics",
-    //     id: ytId,
-    //     key: process.env.YOUTUBE_API_KEY
-    //   }}, function(err, response, body){
-    //       if(err){
-    //         console.log(err);
-    //       }
-    //       var data = JSON.parse(body);
-    //       console.log(data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]);
-    //       var uploadPlaylist = data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"];
-          
-    //       var newYoutuber= {ytUsername: ytName, ytUserId: ytId, ytLink: link, uploadPlaylist: uploadPlaylist, description: desc, thumbSmall: thumbSmall, thumbMed: thumbMed, thumbLarge: thumbLarge};
-            
-    //         Youtuber.create(newYoutuber, function(err, newlyCreated){
-    //           if(err){
-    //               req.flash('error', err.message);
-    //               return res.redirect('back');
-    //           } else {
-    //               //redirect to the new Youtuber page
-    //               //console.log(newlyCreated);
-    //               //res.redirect('/registry' + newlyCreated.id);
-                 
-    //             findLatestVids(newlyCreated);
-    //             findLinks(newlyCreated);
-    //               res.redirect("/registry");
-    //           }
-    //       });
-    //   });
-      
-      res.redirect("/registry");
-     
+                    // createYoutuber(channelId);
+                    
+                    // res.redirect("/registry");
+                  }
     });
+  
+});
+
+router.post("/add", function(req, res) {
+  console.log(req.body);
+  console.log(req.body.channelId);
+  var channelId = req.body.channelId;
+  
+  console.log(channelId);
+  createYoutuber(channelId);
+  res.redirect("/registry");
+  
   
 });
 
@@ -145,5 +179,11 @@ router.get("/:id", function(req, res){
         }
     });
 });
+
+//protects against DDOS regex expression in our search
+//reuse anywhere a user may input for search
+function escapeRegex(text){
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;
