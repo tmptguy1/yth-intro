@@ -13,37 +13,40 @@ function findLatestVids(foundYoutuber){
                   if(err){
                     console.log(err);
                   } else{
-                    
+
                     var data = JSON.parse(body);
-                    for(var i=0; i < data["items"].length; i++){
-                      console.log("how many times is this running   " + i);
-                      var uploadLink = data["items"][i]["id"]["videoId"];
-                      var date = data["items"][i]["snippet"]["publishedAt"];
-                      var title = data["items"][i]["snippet"]["title"];
-                      
-                      var newUpload = {link: uploadLink, date: date, title: title};
-                      console.log("this is my new upload" + newUpload);
+                    data["items"].forEach(function(vid){
+                      console.log("how many times is this running   ");
+                      var uploadLink = vid["id"]["videoId"];
+                      var date = vid["snippet"]["publishedAt"];
+                      var title = vid["snippet"]["title"];
                       
                       
+                            var newUpload = {link: uploadLink, date: date, title: title};
+                            console.log("this is my new upload" + newUpload);
+                              Upload.create(newUpload, function(err, upload){
+                              console.log("ADD TO DB");
+                              console.log(newUpload);
+                              if(err){
+                                  // req.flash('error', err.message);
+                                  
+                              } else {
+                                
+                                
+                                foundYoutuber.uploads.push(upload);
+                                          foundYoutuber.save();
+                                          console.log("Created new upload" + upload._id);
+                                        
+                              }
+                            });
+                          
+                    });
                     
-                      Upload.create(newUpload, function(err, upload){
-                        console.log("Is this creating too many uploads  " + i);
-                        if(err){
-                            // req.flash('error', err.message);
-                            
-                        } else {
-                          
-                          
-                          foundYoutuber.uploads.push(upload);
-                                    foundYoutuber.save();
-                                    console.log("Created new upload" + upload._id);
-                          
-                        }
-                      });
-                      
-                    };
+                    console.log("findlatestvids " + foundYoutuber.uploads);
+                    
                   }
                });
+               
 }
 
 module.exports = findLatestVids;

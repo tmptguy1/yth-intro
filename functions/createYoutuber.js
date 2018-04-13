@@ -43,8 +43,10 @@ function createYoutuber(channelId){
                                 //console.log(newlyCreated);
                                 //res.redirect('/registry' + newlyCreated.id);
                                
-                              findLatestVids(newlyCreated);
+                              
                               findLinks(newlyCreated);
+                              findLatestVids(newlyCreated);
+                              
                                 
                             }
                         });

@@ -3,10 +3,11 @@ var router  = express.Router({mergeParams: true});
 var Youtuber = require("../models/youtuber");
 var Schedule = require("../models/schedule");
 var request = require("request");
+var middleware = require("../middleware");
 
 
 //NEW - show form to create a schedule
-router.get("/registry/:id/schedule/new", function(req, res){
+router.get("/registry/:id/schedule/new", middleware.checkYoutuberOwnership, function(req, res){
     // find youtuber by id
     Youtuber.findById(req.params.id, function(err, youtuber){
         if(err){
@@ -18,7 +19,7 @@ router.get("/registry/:id/schedule/new", function(req, res){
 });
 
 //Schedule create
-router.post("/registry/:id/schedule", function(req, res){
+router.post("/registry/:id/schedule", middleware.checkYoutuberOwnership, function(req, res){
    //lookup youtuber using ID
    Youtuber.findById(req.params.id, function(err, youtuber){
        if(err){
@@ -46,7 +47,7 @@ router.post("/registry/:id/schedule", function(req, res){
 });
 
 //edit route
-router.get("/registry/:id/schedule/:schedule_id/edit", function(req,res){
+router.get("/registry/:id/schedule/:schedule_id/edit", middleware.checkYoutuberOwnership, function(req,res){
     
     Youtuber.findById(req.params.id, function(err, foundYoutuber){
         if(err || !foundYoutuber){
@@ -67,7 +68,7 @@ router.get("/registry/:id/schedule/:schedule_id/edit", function(req,res){
 });
 
 //update schedule route
-router.put("/registry/:id/schedule/:schedule_id", function(req, res){
+router.put("/registry/:id/schedule/:schedule_id", middleware.checkYoutuberOwnership, function(req, res){
     Schedule.findByIdAndUpdate(req.params.schedule_id, req.body.schedule, function(err, updatedSchedule){
         if(err){
             res.redirect("back");
@@ -78,7 +79,7 @@ router.put("/registry/:id/schedule/:schedule_id", function(req, res){
 });
 
 //destroy route
-router.delete("/registry/:id/schedule/:schedule_id", function(req, res){
+router.delete("/registry/:id/schedule/:schedule_id", middleware.checkYoutuberOwnership, function(req, res){
     //findbyid and remove
     Schedule.findByIdAndRemove(req.params.schedule_id, function(err){
         if(err){

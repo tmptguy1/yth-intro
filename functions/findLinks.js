@@ -58,6 +58,7 @@ function findLinks(foundYoutuber){
                     }
                     
                 console.log(text + "----->" + link);
+                console.log("findlinks " + foundYoutuber.uploads);
                 }
                 
                 
@@ -68,6 +69,7 @@ function findLinks(foundYoutuber){
                 // };
               });
             });
+            
 }
 
 module.exports = findLinks;

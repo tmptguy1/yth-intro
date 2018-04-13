@@ -10,6 +10,7 @@ var findUploads   = require("../findUploads.js");
 var findLatestVids   = require("../findLatestVids.js");
 var findLinks     = require("../functions/findLinks.js");
 
+
 const cheerio = require('cheerio');
 
 
@@ -54,6 +55,7 @@ router.get("/", function(req, res){
                 } else {
                     res.render("registry/index", {
                         youtubers: allYoutubers,
+                        currentUser: req.user,
                         current: pageNumber,
                         pages: Math.ceil(count / perPage)
                     });
@@ -100,7 +102,7 @@ router.post("/", function(req, res) {
                 part: "snippet",
                 q: name,
                 type: "channel",
-                maxResults: 5,
+                maxResults: 15,
                 key: process.env.YOUTUBE_API_KEY
                }}, function(err, response, body){
                   if(err){
@@ -161,7 +163,20 @@ router.get("/:id", function(req, res){
             // req.flash("error", "Creator not found");
             res.redirect("back");
         } else {
-            console.log(foundYoutuber)
+                // if(foundYoutuber.uploads.length === 0){
+                //     findLatestVids(foundYoutuber, function(req, res){
+                //         if(err){
+                //             console.log(err);
+                //             res.redirect("back");
+                //         } else {
+                //             findLinks(foundYoutuber);
+                //             res.render("registry/show", {youtuber: foundYoutuber});
+                //         }
+                //     });
+
+                // } else {
+                
+            console.log(foundYoutuber.uploads)
             //render show template with that youtuber
 
             
@@ -176,6 +191,7 @@ router.get("/:id", function(req, res){
             // } else{
             // res.render("registry/show", {youtuber: foundYoutuber});
             // }
+                // }
         }
     });
 });
