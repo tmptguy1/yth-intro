@@ -9,6 +9,7 @@ var createYoutuber = require("../functions/createYoutuber.js");
 var findUploads   = require("../findUploads.js");
 var findLatestVids   = require("../findLatestVids.js");
 var findLinks     = require("../functions/findLinks.js");
+var getTwitchId     = require("../functions/getTwitchId.js");
 
 
 const cheerio = require('cheerio');
@@ -117,12 +118,13 @@ router.post("/", function(req, res) {
                           var channelId = data["items"][i]["snippet"]["channelId"];
                           var title = data["items"][i]["snippet"]["title"];
                           var image = data["items"][i]["snippet"]["thumbnails"]["default"]["url"];
+                          var desc = data["items"][i]["snippet"]["description"];
                           
                           console.log(channelId);
                           console.log(title);
                           console.log(image);
                           
-                          searchResults.push({channelId: channelId, title: title, image: image});
+                          searchResults.push({channelId: channelId, title: title, image: image, description: desc});
                           
                       }
                         res.render("registry/add", {youtubers: searchResults});
@@ -175,23 +177,50 @@ router.get("/:id", function(req, res){
                 //     });
 
                 // } else {
+                getTwitchId(foundYoutuber);
+                var twitchResults = [];
                 
-            console.log(foundYoutuber.uploads)
-            //render show template with that youtuber
-
+                request(
+                       {headers: {'Client-ID': 'juyxgfqzk25e9mhqz8s08q28z849kd'}, url: "https://api.twitch.tv/helix/streams?", qs:{
+                        first: 1,
+                        user_id: foundYoutuber.twitchNumId
+                       }}, function(err, response, body){
+                          if(err){
+                            console.log(err);
+                          } else{
+                    
+                            var twitchData = JSON.parse(body);
+                            console.log(body);
+                            console.log(twitchData);
+                            
+                            for(var i=0; i < twitchData["data"].length; i++){
+                            console.log("how many times is this running   " + i);
+                              var isLive = twitchData["data"][i]["type"];
+                              
+                              
+                              console.log(isLive);
+                              
+                              
+                              twitchResults.push({live: isLive});
+                
+                            console.log(foundYoutuber.uploads)
+                            //render show template with that youtuber
+                
+                            
+                            console.log(foundYoutuber.uploadPlaylist);
             
-            console.log(foundYoutuber.uploadPlaylist);
-            // if(!foundYoutuber.uploads.slice(-1)[0]){
-            //   console.log("We hit the if statement");
-            //     findUploads(req, res, foundYoutuber);
                   
                   
-                    res.render("registry/show", {youtuber: foundYoutuber});
+                            
                   
             // } else{
             // res.render("registry/show", {youtuber: foundYoutuber});
             // }
                 // }
+                            }
+                            res.render("registry/show", {youtuber: foundYoutuber, live: isLive});
+                          }
+                       });
         }
     });
 });

@@ -3,6 +3,9 @@
 <!--<div class="container">-->
     <div class="row">
         <div class="col-md-3">
+          <% if(youtuber.patreonLink != null){ %>
+            <a href="https://www.patreon.com/bePatron?u=<%=youtuber.patreonId%>" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://cdn6.patreon.com/becomePatronButton.bundle.js"></script>
+            <% } %>
           <% if(youtuber.schedules[0] != null){ %>
             <p class="lead">Schedule</p>
             <div class="list-group">
@@ -92,7 +95,8 @@
               <% }); %>
           <% } %>
           
-          <% if(youtuber.twitchLink != null){ %>
+          <% if(youtuber.twitchLink != null && live !=null){ %>
+            <h3>Live right now + <%= live %></h3>
               <div class"row" id="twitch">
                   <!--<div class="col-md-9">-->
                       <!-- Add a placeholder for the Twitch embed -->

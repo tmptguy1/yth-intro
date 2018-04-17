@@ -2,6 +2,7 @@ var request = require("request");
 var Youtuber = require("../models/youtuber");
 var findLatestVids   = require("../findLatestVids.js");
 var findLinks     = require("./findLinks.js");
+var getTwitchId     = require("./getTwitchId.js");
 
 
 
@@ -44,7 +45,11 @@ function createYoutuber(channelId){
                                 //res.redirect('/registry' + newlyCreated.id);
                                
                               
-                              findLinks(newlyCreated);
+                              findLinks(newlyCreated, function(req, res, body){
+                                 console.log("twitch id " + newlyCreated.twitchId);
+                                 getTwitchId(newlyCreated); 
+                              });
+                              
                               findLatestVids(newlyCreated);
                               
                                 

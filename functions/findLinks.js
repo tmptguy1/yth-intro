@@ -1,6 +1,7 @@
 var request  = require("request"),
     cheerio  = require("cheerio"),
-    Youtuber = require("../models/youtuber");
+    Youtuber = require("../models/youtuber"),
+    getTwitchId     = require("./getTwitchId.js");
 
 function findLinks(foundYoutuber){
     request(foundYoutuber.ytLink, function(error, response, body) {
@@ -12,7 +13,7 @@ function findLinks(foundYoutuber){
                 var text = $(this).text();
                 var link = $(this).attr('href');
                 
-                if(link != undefined && (link.indexOf("twitter") > -1 || link.indexOf("facebook") > -1 || link.indexOf("instagram") > -1 || link.indexOf("steam") > -1 || link.indexOf("twitch") > -1 || link.indexOf("discord") > -1)){
+                if(link != undefined && (link.indexOf("twitter") > -1 || link.indexOf("facebook") > -1 || link.indexOf("instagram") > -1 || link.indexOf("steam") > -1 || link.indexOf("twitch") > -1 || link.indexOf("discord") > -1 || link.indexOf("patreon") > -1)){
                     if(link.indexOf("twitter") > -1){
                       Youtuber.findByIdAndUpdate(foundYoutuber._id, {twitterLink: link}, function(err, doc){
                         console.log("Your twitter link is " + link);
@@ -44,10 +45,17 @@ function findLinks(foundYoutuber){
                       var twitchId = link.slice(link.lastIndexOf('twitch.tv/') + 10, link.length);
                         if(twitchId.slice(-1) === "/"){
                           twitchId = twitchId.substring(0, twitchId.length-1);
+                          
+                          
+                          
+                          
                         }
-                            console.log("Your twitchID is " + twitchId);
+                            
                             Youtuber.findByIdAndUpdate(foundYoutuber._id, {twitchLink: link, twitchId: twitchId}, function(err, doc){
                               console.log("Your twitch link is " + link);
+                              console.log("Your twitchID is " + foundYoutuber.twitchId);
+                              
+                              
                             });
                           
                       }
@@ -55,6 +63,28 @@ function findLinks(foundYoutuber){
                       Youtuber.findByIdAndUpdate(foundYoutuber._id, {discordLink: link}, function(err, doc){
                         console.log("Your discord link is " + link);
                       });
+                    }
+                    
+                    if(link.indexOf("patreon") > -1){
+                      request(
+                           {url: "https://api.patreon.com/platform/users?filter[patreon_url]=" + link}, function(err, response, body){
+                              if(err){
+                                console.log(err);
+                              } else{
+            
+                                var data = JSON.parse(body);
+                                console.log(data);
+                                var patreonId = data["data"][0]["id"]
+                                
+                                   Youtuber.findByIdAndUpdate(foundYoutuber._id, {patreonLink: link, patreonId: patreonId}, function(err, doc){
+                                    console.log("Your patreon link is " + link);
+                                    console.log("Your patreon ID is " + patreonId);
+                                });
+                              }
+                           });
+                      
+                      
+                        
                     }
                     
                 console.log(text + "----->" + link);
