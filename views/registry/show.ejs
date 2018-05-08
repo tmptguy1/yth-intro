@@ -84,7 +84,7 @@
                                   <button class="btn btn-xs btn-danger">Delete</button>
                                 </form>
                               </h5>
-                              <p id="noticeContent"><%= notice.content %></p>
+                              <p id="noticeContent"><%- notice.content %></p>
                                   <% if(notice.link != null) { %>
                                       <a href="<%= notice.link %>" class="btn btn-lg active btn-primary" role="button" aria-pressed="true"  target="_blank"><%= notice.linkLabel %></a>
                                   <% } %>

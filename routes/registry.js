@@ -117,7 +117,7 @@ router.post("/", function(req, res) {
                         console.log("how many times is this running   " + i);
                           var channelId = data["items"][i]["snippet"]["channelId"];
                           var title = data["items"][i]["snippet"]["title"];
-                          var image = data["items"][i]["snippet"]["thumbnails"]["default"]["url"];
+                          var image = data["items"][i]["snippet"]["thumbnails"]["medium"]["url"];
                           var desc = data["items"][i]["snippet"]["description"];
                           
                           console.log(channelId);
@@ -177,31 +177,33 @@ router.get("/:id", function(req, res){
                 //     });
 
                 // } else {
-                getTwitchId(foundYoutuber);
-                var twitchResults = [];
-                
-                request(
-                       {headers: {'Client-ID': 'juyxgfqzk25e9mhqz8s08q28z849kd'}, url: "https://api.twitch.tv/helix/streams?", qs:{
-                        first: 1,
-                        user_id: foundYoutuber.twitchNumId
-                       }}, function(err, response, body){
-                          if(err){
-                            console.log(err);
-                          } else{
+                if(foundYoutuber.twitchId != null){
+                    getTwitchId(foundYoutuber);
+                    var twitchResults = [];
                     
-                            var twitchData = JSON.parse(body);
-                            console.log(body);
-                            console.log(twitchData);
-                            
-                            for(var i=0; i < twitchData["data"].length; i++){
-                            console.log("how many times is this running   " + i);
-                              var isLive = twitchData["data"][i]["type"];
-                              
-                              
-                              console.log(isLive);
-                              
-                              
-                              twitchResults.push({live: isLive});
+                    request(
+                           {headers: {'Client-ID': 'juyxgfqzk25e9mhqz8s08q28z849kd'}, url: "https://api.twitch.tv/helix/streams?", qs:{
+                            first: 1,
+                            user_id: foundYoutuber.twitchNumId
+                           }}, function(err, response, body){
+                              if(err){
+                                console.log(err);
+                              } else{
+                        
+                                var twitchData = JSON.parse(body);
+                                console.log(body);
+                                console.log(twitchData);
+                                
+                                for(var i=0; i < twitchData["data"].length; i++){
+                                console.log("how many times is this running   " + i);
+                                  var isLive = twitchData["data"][i]["type"];
+                                  
+                                  
+                                  console.log(isLive);
+                                  
+                                  
+                                  twitchResults.push({live: isLive});
+                                
                 
                             console.log(foundYoutuber.uploads)
                             //render show template with that youtuber
@@ -221,6 +223,10 @@ router.get("/:id", function(req, res){
                             res.render("registry/show", {youtuber: foundYoutuber, live: isLive});
                           }
                        });
+                } else {
+                    var isLive = ""
+                    res.render("registry/show", {youtuber: foundYoutuber, live: isLive});
+                }
         }
     });
 });
